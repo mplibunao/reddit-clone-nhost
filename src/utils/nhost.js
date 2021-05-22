@@ -1,8 +1,7 @@
 import { createClient } from "nhost-js-sdk";
 
 const config = {
-  baseURL: process.env.REACT_APP_BACKEND_ENDPOINT,
-  baseURL: "https://backend-REPLACE.nhost.app",
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_ENDPOINT,
 };
 
 const { auth, storage } = createClient(config);
