@@ -1,39 +1,29 @@
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { auth } from "utils";
+import { useRouter } from "next/router";
 import Link from "next/link";
 
-export const Register = ({ defaultValues = { email: "", password: "" } }) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { isSubmitSuccessful },
-  } = useForm({
+export const Login = ({ defaultValues = { email: "", password: "" } }) => {
+  const router = useRouter();
+  const { register, handleSubmit } = useForm({
     defaultValues,
     mode: "onBlur",
   });
 
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset({ ...defaultValues });
-    }
-  }, [reset, isSubmitSuccessful, defaultValues]);
-
   const onSubmit = async ({ email, password }) => {
     try {
-      await auth.register({ email, password });
-      alert("Registration succesful");
+      await auth.login({ email, password });
+      alert("Login succesful");
+      router.push("/");
     } catch (error) {
-      alert("register failed");
+      alert("Login failed");
     }
   };
+
   return (
     <div className="container mx-auto">
       <div className="flex flex-col max-w-xl mx-auto shadow px-4 my-12 py-5">
-        <div className="text-center uppercase text-gray-700  pb-4">
-          Register
-        </div>
+        <div className="text-center uppercase text-gray-700  pb-4">Login</div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col">
@@ -57,14 +47,14 @@ export const Register = ({ defaultValues = { email: "", password: "" } }) => {
                 type="submit"
                 className="bg-indigo-700 text-white uppercase px-4 py-2 text-sm"
               >
-                Register
+                Login
               </button>
             </div>
 
-            <div className="py-6 text-center text-gray-700">
-              Already have an account?{" "}
-              <Link href="/login">
-                <a className="text-indigo-700 hover:underline">Login</a>
+            <div className="py-6 text-gray-700 text-center">
+              Don't have an account?{" "}
+              <Link href="/register">
+                <a className="text-indigo-700 hover:underline">Register</a>
               </Link>
               .
             </div>
@@ -75,4 +65,4 @@ export const Register = ({ defaultValues = { email: "", password: "" } }) => {
   );
 };
 
-export default Register;
+export default Login;
