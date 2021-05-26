@@ -42,8 +42,8 @@ export default function Home({
       router.push("/");
     } catch (err) {
       alert("post creation failed");
-      console.error(error);
-      return console.error(error);
+      console.error(err);
+      return console.error(err);
     }
   };
 

@@ -2,9 +2,28 @@ import React from "react";
 import { ArrowUp, ArrowDown, Edit, Delete } from "components/svg";
 import { auth } from "utils";
 import Link from "next/link";
+import { gql, useMutation } from "@apollo/client";
+
+const DELETE_POST = gql`
+  mutation deletePost($post_id: uuid!) {
+    delete_posts_by_pk(id: $post_id) {
+      id
+    }
+  }
+`;
 
 export const Post = ({ post, signedIn }) => {
-  const handleDeletePost = () => {};
+  console.log("post", post.user_id); // eslint-disable-line no-console
+  console.log(auth.getClaim("x-hasura-user-id")); // eslint-disable-line no-console
+  const [deletePost] = useMutation(DELETE_POST);
+  const handleDeletePost = async () => {
+    try {
+      await deletePost({ variables: { post_id: post.id } });
+    } catch (error) {
+      console.log("error", error); // eslint-disable-line no-console
+    }
+  };
+
   return (
     <div className="flex p-6 shadow-md">
       <div className="flex flex-col items-center">

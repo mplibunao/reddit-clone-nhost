@@ -1,11 +1,11 @@
 import { Layout } from "components/layout";
-import { useQuery, gql } from "@apollo/client";
+import { useSubscription, gql } from "@apollo/client";
 import { useAuth } from "@nhost/react-auth";
 import { Main } from "components/layout";
 import { Post } from "components/post";
 
 const GET_POSTS = gql`
-  query getPosts {
+  subscription getPosts {
     posts {
       id
       title
@@ -26,7 +26,7 @@ export default function Home() {
 }
 
 const ListPosts = ({ signedIn }) => {
-  const { data, loading, error } = useQuery(GET_POSTS);
+  const { data, loading, error } = useSubscription(GET_POSTS);
 
   if (loading & !data) {
     return <div>Post loading...</div>;
