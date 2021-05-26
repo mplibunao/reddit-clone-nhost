@@ -1,6 +1,8 @@
 import { Layout, Main } from "components/layout";
 import { useMutation, gql } from "@apollo/client";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const CREATE_POST = gql`
   mutation insertPost($post: posts_insert_input!) {
@@ -13,10 +15,23 @@ const CREATE_POST = gql`
 export default function Home({
   defaultValues = { title: "", description: "" },
 }) {
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitSuccessful },
+  } = useForm({
     defaultValues,
     mode: "onBlur",
   });
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset({ ...defaultValues });
+    }
+  }, [reset, isSubmitSuccessful, defaultValues]);
+
+  const router = useRouter();
 
   const [createPost] = useMutation(CREATE_POST);
 
@@ -24,6 +39,7 @@ export default function Home({
     try {
       await createPost({ variables: { post } });
       alert("post created");
+      router.push("/");
     } catch (err) {
       alert("post creation failed");
       console.error(error);
