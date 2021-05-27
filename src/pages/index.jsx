@@ -32,11 +32,36 @@ const GET_POSTS = gql`
   }
 `;
 
+const GET_SIGNED_OUT_POSTS = gql`
+  subscription getSignedOutPosts {
+    posts {
+      id
+      title
+      description
+      created_at
+      user_id
+      user {
+        id
+        display_name
+      }
+      post_votes_aggregate {
+        aggregate {
+          sum {
+            vote_type
+          }
+        }
+      }
+    }
+  }
+`;
+
 export default function Home() {
   const { signedIn } = useAuth();
   return (
     <Layout>
-      <Main>{signedIn ? <ListPosts signedIn={signedIn} /> : null}</Main>
+      <Main>
+        {signedIn ? <ListPosts signedIn={signedIn} /> : <SignedOutListPost />}
+      </Main>
     </Layout>
   );
 }
@@ -61,6 +86,29 @@ const ListPosts = ({ signedIn }) => {
     <div className="my-8">
       {posts.map((post) => (
         <Post key={post.id} post={post} signedIn={signedIn} />
+      ))}
+    </div>
+  );
+};
+
+const SignedOutListPost = () => {
+  const { data, loading, error } = useSubscription(GET_SIGNED_OUT_POSTS);
+
+  if (loading & !data) {
+    return <div>Post loading...</div>;
+  }
+
+  if (error) {
+    console.log("error", error); // eslint-disable-line no-console
+    return <div>Error loading posts</div>;
+  }
+
+  const { posts } = data;
+
+  return (
+    <div className="my-8">
+      {posts.map((post) => (
+        <Post key={post.id} post={post} />
       ))}
     </div>
   );

@@ -39,7 +39,8 @@ export const Post = ({ post, signedIn }) => {
   const [upsertPostVote] = useMutation(UPSERT_POST_VOTE);
   const [deletePostVote] = useMutation(DELETE_POST_VOTE);
 
-  const vote = post.post_votes.length === 1 ? post.post_votes[0].vote_type : 0;
+  const vote =
+    post?.post_votes?.length === 1 ? post.post_votes[0].vote_type : 0;
 
   const handleDeletePost = async () => {
     try {

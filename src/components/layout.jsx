@@ -40,7 +40,7 @@ const UserHeader = () => {
         className="cursor-pointer"
         onClick={() => {
           auth.logout();
-          router.push("/login");
+          router.push("/");
         }}
       >
         logout
