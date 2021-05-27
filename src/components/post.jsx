@@ -62,6 +62,7 @@ export const Post = ({ post, signedIn }) => {
         });
       }
     } catch (err) {
+      alert("You must login to upvote");
       console.log("err", err); // eslint-disable-line no-console
     }
   };
@@ -78,6 +79,7 @@ export const Post = ({ post, signedIn }) => {
         });
       }
     } catch (err) {
+      alert("You must login to downvote");
       console.log("err", err); // eslint-disable-line no-console
     }
   };
